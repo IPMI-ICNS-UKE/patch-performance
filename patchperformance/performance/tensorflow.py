@@ -16,10 +16,16 @@ class TensorflowPatchPerformance(BasePatchPerformance):
         prediction = kwargs.get('y_pred', None)
         target = kwargs.get('y_true', None)
 
-        if prediction is None:
-            prediction = args[1]
         if target is None:
-            target = args[0]
+            try:
+                target = args[0]
+            except IndexError as e:
+                raise ValueError(f'No args given: args=[{args}], kwarg keys={{{kwargs}}}')
+        if prediction is None:
+            try:
+                prediction = args[1]
+            except IndexError as e:
+                raise ValueError(f'Insufficient number of args given: args=[{args}], kwarg keys={{{kwargs}}}')
 
         return {
             'prediction': prediction,
