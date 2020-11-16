@@ -1,10 +1,10 @@
 import pytest
 
 from tests.setups import *
-from patchperformance.base import _BasePatchPerformance
+from patchperformance.performance.base import BasePatchPerformance
 
 
-class VoidBasePatchPerformance(_BasePatchPerformance):
+class VoidBasePatchPerformance(BasePatchPerformance):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -44,43 +44,47 @@ class DummyBCE:
 
 
 class TestBasePatchPerformance:
+    dce = DummyBCE()
+
     @pytest.mark.parametrize("valid_measure", valid_measures)
     def test_measure_setter_valid(self, valid_measure):
         assert VoidBasePatchPerformance(
-            loss=DummyBCE,
+            loss=self.dce,
             measure=valid_measure
         ) is not None
 
     def test_measure_setter_invalid(self):
         with pytest.raises(ValueError):
             VoidBasePatchPerformance(
-                loss=DummyBCE,
+                loss=self.dce,
                 measure=invalid_string_input
             )
 
     @pytest.mark.parametrize("valid_measure", valid_measures)
     def test_track_valid(self, valid_measure):
         assert VoidBasePatchPerformance.track(
-            loss=DummyBCE,
+            loss=self.dce,
             measure=valid_measure
         ) is not None
 
     def test_track_invalid(self):
         with pytest.raises(ValueError):
             VoidBasePatchPerformance.track(
-                loss=DummyBCE,
+                loss=self.dce,
                 measure=invalid_string_input
             )
 
     @pytest.mark.parametrize("valid_measure", valid_measures)
-    def test_call(self, valid_measure):
+    def test_call(self, valid_measure, dummy_predictions, dummy_targets):
         bpp = VoidBasePatchPerformance.track(
-            loss=DummyBCE,
+            loss=self.dce,
             measure=valid_measure
         )
         decorated_loss = bpp(prediction=dummy_predictions, target=dummy_targets)
         direct_loss = DummyBCE.forward(prediction=dummy_predictions, target=dummy_targets)
         assert decorated_loss == direct_loss
-        assert bpp._n_samples == 1
+        assert bpp.n_patches_seen == dummy_predictions.shape[0]
+        print(bpp._measure_sum)
+        print(dummy_predictions)
         assert bpp._measure_sum.shape == dummy_predictions.shape[1:]
-        assert bpp._measure_sum.sum() / bpp._n_samples == direct_loss
+        assert bpp._measure_sum.sum() / bpp.n_patches_seen == direct_loss

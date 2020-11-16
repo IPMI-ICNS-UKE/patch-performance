@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 
 valid_measures = [
-    'cross_entropy',
+    'binary_cross_entropy',
     'l2'
 ]
 
@@ -17,6 +17,6 @@ def dummy_predictions():
 
 
 @pytest.fixture
-def dummy_targets():
+def dummy_targets(dummy_predictions):
     dummy_targets = np.ones_like(dummy_predictions)
     return dummy_targets
