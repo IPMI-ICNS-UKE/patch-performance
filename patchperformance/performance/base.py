@@ -22,9 +22,12 @@ class BasePatchPerformance(ABC):
     def measure(self, value):
         if value == 'binary_cross_entropy':
             measure_function = self._MEASURER.binary_cross_entropy
-
+        elif value == 'binary_cross_entropy_with_logits':
+            measure_function = self._MEASURER.binary_cross_entropy_with_logits
         elif value == 'l2':
             measure_function = self._MEASURER.l2
+        elif value == 'l2_with_logits':
+            measure_function = self._MEASURER.l2_with_logits
         else:
             raise ValueError(f'{value} is not a valid measure')
 
