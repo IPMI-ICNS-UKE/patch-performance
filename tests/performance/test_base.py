@@ -46,7 +46,7 @@ class DummyBCE:
 class TestBasePatchPerformance:
     dce = DummyBCE()
 
-    @pytest.mark.parametrize("valid_measure", valid_measures)
+    @pytest.mark.parametrize('valid_measure', valid_measures)
     def test_measure_setter_valid(self, valid_measure):
         assert VoidBasePatchPerformance(
             loss=self.dce,
@@ -60,7 +60,7 @@ class TestBasePatchPerformance:
                 measure=invalid_string_input
             )
 
-    @pytest.mark.parametrize("valid_measure", valid_measures)
+    @pytest.mark.parametrize('valid_measure', valid_measures)
     def test_track_valid(self, valid_measure):
         assert VoidBasePatchPerformance.track(
             loss=self.dce,
@@ -74,7 +74,7 @@ class TestBasePatchPerformance:
                 measure=invalid_string_input
             )
 
-    @pytest.mark.parametrize("valid_measure", valid_measures)
+    @pytest.mark.parametrize('valid_measure', valid_measures)
     def test_call(self, valid_measure, dummy_predictions, dummy_targets):
         bpp = VoidBasePatchPerformance.track(
             loss=self.dce,

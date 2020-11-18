@@ -12,15 +12,15 @@ torch_losses = [
 
 class TestBasePatchPerformance:
 
-    @pytest.mark.parametrize("valid_measure", valid_measures)
-    @pytest.mark.parametrize("loss", torch_losses)
+    @pytest.mark.parametrize('valid_measure', valid_measures)
+    @pytest.mark.parametrize('loss', torch_losses)
     def test_measure_setter_valid(self, valid_measure, loss):
         assert TorchPatchPerformance(
             loss=loss,
             measure=valid_measure
         ) is not None
 
-    @pytest.mark.parametrize("loss", torch_losses)
+    @pytest.mark.parametrize('loss', torch_losses)
     def test_measure_setter_invalid(self, loss):
         with pytest.raises(ValueError):
             TorchPatchPerformance(
@@ -28,15 +28,15 @@ class TestBasePatchPerformance:
                 measure=invalid_string_input
             )
 
-    @pytest.mark.parametrize("valid_measure", valid_measures)
-    @pytest.mark.parametrize("loss", torch_losses)
+    @pytest.mark.parametrize('valid_measure', valid_measures)
+    @pytest.mark.parametrize('loss', torch_losses)
     def test_track_valid(self, valid_measure, loss):
         assert TorchPatchPerformance.track(
             loss=loss,
             measure=valid_measure
         ) is not None
 
-    @pytest.mark.parametrize("loss", torch_losses)
+    @pytest.mark.parametrize('loss', torch_losses)
     def test_track_invalid(self, loss):
         with pytest.raises(ValueError):
             TorchPatchPerformance.track(
@@ -44,8 +44,8 @@ class TestBasePatchPerformance:
                 measure=invalid_string_input
             )
 
-    @pytest.mark.parametrize("valid_measure", valid_measures)
-    @pytest.mark.parametrize("loss", torch_losses)
+    @pytest.mark.parametrize('valid_measure', valid_measures)
+    @pytest.mark.parametrize('loss', torch_losses)
     def test_call(self, valid_measure, loss, dummy_predictions, dummy_targets):
         tpp = TorchPatchPerformance.track(
             loss=loss,
