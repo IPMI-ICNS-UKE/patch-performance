@@ -15,6 +15,7 @@ class TorchPatchPerformance(BasePatchPerformance):
         )
 
     def forward(self, *args, **kwargs):
+        print('test')
         return self.__call__(*args, **kwargs)
 
     def _normalize_input(self, *args, **kwargs) -> dict:
@@ -22,9 +23,15 @@ class TorchPatchPerformance(BasePatchPerformance):
         target = kwargs.get('target', None)
 
         if prediction is None:
-            prediction = args[0]
+            try:
+                prediction = args[0]
+            except IndexError as e:
+                raise ValueError(f'No args given: args=[{args}], kwarg keys={{{kwargs}}}')
         if target is None:
-            target = args[1]
+            try:
+                target = args[1]
+            except IndexError as e:
+                raise ValueError(f'Insufficient number of args given: args=[{args}], kwarg keys={{{kwargs}}}')
 
         return {
             'prediction': prediction,
