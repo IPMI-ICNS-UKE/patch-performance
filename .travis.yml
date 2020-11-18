@@ -1,0 +1,15 @@
+language: python
+python:
+  - "3.6"
+  - "3.7"
+  - "3.8"
+  - "3.9"
+  - "nightly"
+
+install:
+  - pip install torch==1.7.0+cpu
+  - pip install tensorflow
+  - pip install .
+
+script:
+  - pytest
