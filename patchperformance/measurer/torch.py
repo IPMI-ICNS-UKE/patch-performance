@@ -30,11 +30,7 @@ class TorchMeasurer(BaseMeasurer):
     @staticmethod
     def l2(prediction: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
         with torch.no_grad():
-            performance = F.mse_loss(
-                input=prediction,
-                target=target,
-                reduction='none'
-            )
+            performance = torch.sqrt((target - prediction) ** 2)
 
             return performance.sum(0)
 
