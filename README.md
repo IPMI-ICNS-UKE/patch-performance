@@ -15,6 +15,7 @@ When dealing with large images (e.g. 2D/3D/4D medical images) your GPU memory is
 In doing so, the following question arises: How to determine the most efficient patch overlap used for extraction? Here, we define efficiency in terms of prediction performance (e.g. overall Dice score in the case of image segmentation) divided by the required inference wall-clock time. In other words: Shifting the prediction patch location just by 1 pixel in each dimension will most likely yield top-performing results but is certainly not efficient in any way.
 
 By calculating the patch performance the optimal patch overlap can be estimated from the resulting spatially resolved map. For some datasets, the mean pixel-wise performance is not dependent on the relative patch coordinate at all, for others there is a strong correlation.
+In the former case, running the inference with a larger patch overlap will increase your elapsed wall-clock time whereas the prediciton performance will most likely not profit from it. Consequently, this approach will decrease your overall inference efficiency.
 
 ## Installation
 To install this package from PyPI please run
@@ -23,7 +24,8 @@ pip install patchperformance
 ```
 
 ## Usage
-Tracking the patch performance is easy. Just wrap your loss function with `TorchPatchPerformance`or `TensorflowPatchPerformance`
+Tracking the patch performance is easy. Just wrap your loss function with `TorchPatchPerformance`or `TensorflowPatchPerformance`.
+Here's an example using PyTorch:
 ```python
 import torch
 import torch.nn as nn
@@ -33,7 +35,7 @@ from patchperformance import TorchPatchPerformance
 # but any nn.Module-based loss is fine
 loss = nn.BCELoss()
 
-# Wrapping your loss. Here, the measure parameter defines
+# Wrap your loss. Here, the measure parameter defines
 # the function used for evaluating the patch performance.
 # Your loss remains unaffected.
 loss = TorchPatchPerformance.track(loss, measure='binary_cross_entropy')
@@ -48,12 +50,13 @@ loss_value = loss(predictions, targets)
 patch_performance: torch.Tensor = loss.calculate_performance()
 
 # Usually the patch performance maps of the first few
-# epochs are meaningless, especially if the network is
-# trained from scratch. Thus, the accumulated patch
-# performance can be reset by executing
+# epochs/iterations are meaningless, especially if the network
+# is trained from scratch. Thus, the accumulated patch
+# performance can be reset by calling
 loss.reset()
+# We recommend to use patch performance maps of the very last
+# epoch/iterations (i.e. after model convergence)
 ```
-
 
 ## Citation
 If you find the patch performance technique and/or this repository useful, please consider citing our corresponding MICCAI 2020 paper:
