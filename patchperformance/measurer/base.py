@@ -4,11 +4,6 @@ from abc import ABC, abstractmethod
 class BaseMeasurer(ABC):
     @staticmethod
     @abstractmethod
-    def sum_batch(batch_tensor):
-        raise NotImplementedError
-
-    @staticmethod
-    @abstractmethod
     def binary_cross_entropy(prediction, target):
         raise NotImplementedError
 
