@@ -61,7 +61,7 @@ loss.reset()
 ```
 
 ## Citation
-If you find the patch performance technique and/or this repository useful, please consider citing our corresponding MICCAI 2020 paper:
+If you find the patch performance technique and/or this repository useful, please cite our corresponding MICCAI 2020 paper:
 ```
 @InProceedings{MadestaSchmitz2020,
 author="Madesta, Frederic and Schmitz, R{\"u}diger and R{\"o}sch, Thomas and Werner, Ren{\'e}",
